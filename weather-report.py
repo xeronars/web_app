@@ -1,14 +1,19 @@
 import requests
-import xml.etree.ElementTree as ET 
 import json
 
 URL_1 = "https://geocoding-api.open-meteo.com/v1/search"
-URL_2 = "https://api.open-meteo.com/v1/forecast?current_weather=true"
+params_1 = {"name": "Chicago", "country": "US", "count": 1, "format": "json"}
 
-response_1 = requests.get(URL_1)
+response_1 = requests.get(URL_1, params=params_1)
 print("Status:", response_1.status_code)
 print("Final URL:", response_1.url)
+
+geo = response_1.json()["results"][0]
+lat, lon = geo["latitude"], geo["longitude"]
+URL_2 = "https://api.open-meteo.com/v1/forecast?current_weather=true"
+params_2 = {"latitude": lat, "longitude": lon, "current_weather": "true"}
 
 response_2 = requests.get(URL_2)
 print("Status:", response_2.status_code)
 print("Final URL:", response_2.url)
+
