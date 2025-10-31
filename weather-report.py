@@ -21,6 +21,7 @@ weather = response_2.json()["current_weather"]
 
 data = {
     "city": geo["name"],
+    "country": geo["country_code"],
     "latitude": lat,
     "longitude": lon,
     "temperature": weather["temperature"],
