@@ -4,9 +4,9 @@ import psycopg
 from psycopg import OperationalError
 
 DB_NAME = "web_app"
-DB_USER = "postgres"                  # postgres
-DB_PASSWORD = "Nguyenyennhi2!"           # server connection password
-DB_HOST = "localhost"                # or your server's IP
+DB_USER = "postgres"                  
+DB_PASSWORD = "Nguyenyennhi2!"           
+DB_HOST = "localhost"                
 DB_PORT = "5432"
 
 def fetch_weather(city, country):
