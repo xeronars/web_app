@@ -1,1 +1,0 @@
-SELECT * FROM observations ORDER BY id;
