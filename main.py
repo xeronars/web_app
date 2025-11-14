@@ -1,12 +1,22 @@
 import requests
 import json
 from weather_report import WeatherDB
+import os
+from dotenv import load_dotenv
 
-DB_NAME = "web_app"
-DB_USER = "postgres"                  
-DB_PASSWORD = "Nguyenyennhi2!"           
-DB_HOST = "localhost"                
-DB_PORT = "5432"
+load_dotenv()
+
+DB_NAME = os.getenv('db_name')
+DB_USER = os.getenv('db_user')
+DB_PASSWORD = os.getenv('db_password')
+DB_HOST = os.getenv('db_host')
+DB_PORT = os.getenv('db_port')
+
+#DB_NAME = "web_app"
+#DB_USER = "postgres"                  
+#DB_PASSWORD = "Nguyenyennhi2!"           
+#DB_HOST = "localhost"                
+#DB_PORT = "5432"
 
 def fetch_weather(city, country):
     URL_1 = "https://geocoding-api.open-meteo.com/v1/search"

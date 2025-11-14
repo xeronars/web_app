@@ -1,15 +1,16 @@
 import psycopg
 from psycopg import OperationalError
 
+
 class WeatherDB:
     def __init__(self, dbname, user, password, host, port):
         try:
             self.conn = psycopg.connect(
-                dbname=DB_NAME,
-                user=DB_USER,
-                password=DB_PASSWORD,
-                host=DB_HOST,
-                port=DB_PORT
+                dbname=dbname,
+                user=user,
+                password=password,
+                host=host,
+                port=port
             )
             print("Connected to the database successfully.")
             self.create_table()
