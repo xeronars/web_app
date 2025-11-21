@@ -36,7 +36,7 @@ class WeatherDB:
             self.conn.commit()
             print("Created weather_reports table.")
 
-    def insert_weather_report(self, conn, data):
+    def insert_weather_report(self, data):
         with self.conn.cursor() as cur:
             cur.execute(
                 """
@@ -46,10 +46,10 @@ class WeatherDB:
                 (data["city"], data["country"], data["latitude"], data["longitude"],
                  data["temperature"], data["windspeed_kmh"], data["observation_time"])
             )
-            conn.commit()
+            self.conn.commit()
             print(f"Weather report inserted.")
 
-    def read_weather_reports(self, conn):
+    def read_weather_reports(self):
         with self.conn.cursor() as cur:
             cur.execute("SELECT * FROM weather_reports;")
             rows = cur.fetchall()
@@ -57,8 +57,8 @@ class WeatherDB:
             for row in rows:
                 print(row)
 
-    def read_weather_report_by_id(self, conn, report_id):
-        with conn.cursor() as cur:
+    def read_weather_report_by_id(self, report_id):
+        with self.conn.cursor() as cur:
             cur.execute("SELECT * FROM weather_reports WHERE id = %s;", (report_id,))
             row = cur.fetchone()
             if row:
@@ -66,18 +66,18 @@ class WeatherDB:
             else:
                 print(f"Cannot find ID: {report_id}.")
 
-    def update_weather_report_lat_lon(self, conn, report_id, latitude, longitude):
-        with conn.cursor() as cur:
+    def update_weather_report_lat_lon(self, report_id, latitude, longitude):
+        with self.conn.cursor() as cur:
             cur.execute(
                 "UPDATE weather_reports SET latitude = %s, longitude = %s WHERE id = %s;",
                 (latitude, longitude, report_id)
             )
-            conn.commit()
+            self.conn.commit()
             print(f"Weather report with ID {report_id} updated.")
         
 
-    def delete_weather_report(self, conn, report_id):
-        with conn.cursor() as cur:
+    def delete_weather_report(self, report_id):
+        with self.conn.cursor() as cur:
             cur.execute("DELETE FROM weather_reports WHERE id = %s;", (report_id,))
-            conn.commit()
+            self.conn.commit()
             print(f"Deleted weather report with ID {report_id}.")
