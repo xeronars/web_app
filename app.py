@@ -51,20 +51,47 @@ def result():
         city = request.form.get("city")
         if not city:
             return "City not provided", 400
-        data = fetch_weather(city)
-        if data:
-            weather_db.insert_weather_report(data)
+
+        try:
+            with weather_db.conn.cursor() as cur:
+                cur.execute(
+                    "SELECT * FROM weather_reports WHERE LOWER(city) = LOWER(%s) ORDER BY observation_time DESC LIMIT 1",
+                    (city,)
+                )
+                row = cur.fetchone()
+        except Exception as e:
+            print(f"Database read error: {e}")
+            row = None
+
+        if row:
+            data = {
+                "city": row[1],
+                "country": row[2],
+                "latitude": row[3],
+                "longitude": row[4],
+                "temperature": row[5],
+                "windspeed_kmh": row[6],
+                "observation_time": row[7],
+            }
             return render_template("result.html", weather=data)
         else:
-            return "City not found or API error", 404
-    return render_template("home.html") 
+            return f"City '{city}' not found in database.", 404
+
+    return render_template("home.html")
+
 
 @app.route("/viewall")
 def viewall():
-    with weather_db.conn.cursor() as cur: 
-        cur.execute("SELECT * FROM weather_reports;") 
-        rows = cur.fetchall() 
-    return render_template("viewall.html", rows=rows)  
+    try:
+        with weather_db.conn.cursor() as cur: 
+            cur.execute("""
+                SELECT * FROM weather_reports ORDER BY id;
+            """) 
+            rows = cur.fetchall()
+        return render_template("viewall.html", rows=rows) 
+    except Exception as e:
+        print(f"Database read error: {e}")
+        return "Error fetching weather reports.", 500
 
 
 if __name__ == "__main__":
