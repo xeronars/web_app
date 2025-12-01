@@ -84,6 +84,11 @@ def main():
     json_format = json.dumps(all_weather_data, indent=2)
     print("All weather data in JSON format:")
     print(json_format)
+
+    weather_db = WeatherDB(DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT)
+    rows = weather_db.read_weather_reports()
+    print(rows)
+
 if __name__ == "__main__":
     main()
         

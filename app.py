@@ -45,22 +45,26 @@ def fetch_weather(city, country="US"):
 def home():
     return render_template("home.html")
 
-@app.route("/result", methods=["POST"])
+@app.route("/result", methods=["GET", "POST"])
 def result():
-    city = request.form["city"]
-
-    data = fetch_weather(city)
-    weather_db.insert_weather_report(data)
-
-    return render_template("result.html", weather=data)
+    if request.method == "POST":
+        city = request.form.get("city")
+        if not city:
+            return "City not provided", 400
+        data = fetch_weather(city)
+        if data:
+            weather_db.insert_weather_report(data)
+            return render_template("result.html", weather=data)
+        else:
+            return "City not found or API error", 404
+    return render_template("home.html") 
 
 @app.route("/viewall")
 def viewall():
-    with weather_db.conn.cursor() as cur:
-        cur.execute("SELECT * FROM weather_reports;")
-        rows = cur.fetchall()
-
-    return render_template("viewall.html", rows=rows)
+    with weather_db.conn.cursor() as cur: 
+        cur.execute("SELECT * FROM weather_reports;") 
+        rows = cur.fetchall() 
+    return render_template("viewall.html", rows=rows)  
 
 
 if __name__ == "__main__":
