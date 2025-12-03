@@ -12,12 +12,6 @@ DB_PASSWORD = os.getenv('db_password')
 DB_HOST = os.getenv('db_host')
 DB_PORT = os.getenv('db_port')
 
-#DB_NAME = "web_app"
-#DB_USER = "postgres"                  
-#DB_PASSWORD = "Nguyenyennhi2!"           
-#DB_HOST = "localhost"                
-#DB_PORT = "5432"
-
 def fetch_weather(city, country, show_info=False):
     URL_1 = "https://geocoding-api.open-meteo.com/v1/search"
     params_1 = {"name": city, "country": country, "count": 1, "format": "json"}
